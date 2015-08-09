@@ -1,1 +1,5 @@
+*.iso
 packer_cache
+*.box
+*.ovf
+.vagrant

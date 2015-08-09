@@ -104,6 +104,3 @@ if [[ $PACKER_BUILDER_TYPE =~ parallels ]]; then
     rm -rf $SSH_USER_HOME/prl-tools-lin.iso
     rm -f $SSH_USER_HOME/.prlctl_version
 fi
-
-echo "==> Removing packages needed for building guest tools"
-yum -y remove gcc cpp libmpc mpfr kernel-devel kernel-headers perl
