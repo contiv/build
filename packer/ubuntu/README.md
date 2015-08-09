@@ -1,6 +1,6 @@
-## Centos Images
+## Ubuntu Images
 
-Adapted from https://github.com/boxcutter/centos
+Adapted from https://github.com/boxcutter/ubuntu
 
 You can read more about this project
 [here](https://github.com/contiv/build/blob/master/packer/README.md). There are

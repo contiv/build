@@ -13,3 +13,9 @@ type).
   docker.
 * You will want ansible on your host. Install with `pip install ansible`,
   typically as root.
+
+## Requirements
+
+* VirtualBox 5.0+ (needed to support vbox tools under 4.x kernel)
+* Vagrant 1.7.4+ (to support VBox 5.0+)
+* Ansible 1.9.2
