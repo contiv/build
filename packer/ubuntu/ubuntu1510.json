@@ -75,10 +75,21 @@
         "script/sshd.sh",
         "script/vmtool.sh",
         "script/docker.sh",
-        "script/minimize.sh",
-        "script/cleanup.sh"
+        "script/ansible.sh"
       ],
       "type": "shell"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "../../ansible/netplugin/site.yml"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "script/minimize.sh",
+        "script/cleanup.sh"
+      ]
     }
   ],
   "variables": {
