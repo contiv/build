@@ -1,6 +1,8 @@
 - hosts: all
   sudo: true
   tasks:
+    - yum: "name=https://repos.fedorapeople.org/repos/openstack/openstack-kilo/rdo-release-kilo-1.noarch.rpm"
+      when: ansible_os_family == "RedHat"
     - apt: "update_cache=yes name={{ item }}"
       with_items:
         - unzip
@@ -8,6 +10,15 @@
         - curl
         - python-software-properties
         - git 
+      when: ansible_os_family == "Debian"
+    - yum: "update_cache=yes name={{ item }}"
+      with_items:
+        - unzip
+        - vim
+        - curl
+        - git
+        - openvswitch
+      when: ansible_os_family == "RedHat"
     - shell: creates=/usr/local/go/bin/go curl -L https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz | tar -xvz -C /usr/local
     - get_url: 
         url: https://github.com/coreos/etcd/releases/download/v2.0.0/etcd-v2.0.0-linux-amd64.tar.gz
@@ -15,6 +26,7 @@
     - shell: creates=/usr/bin/etcd tar vxzf /tmp/etcd.tar.gz && mv etcd-v2.0.0-linux-amd64/etcd* /usr/bin
     - shell: creates=/usr/bin/docker curl https://get.docker.com | bash
     - lineinfile:
+        create: yes
         dest: /etc/default/docker
         line: ". /etc/profile.d/envvar.sh"
     - user: name=vagrant groups=docker append=yes
@@ -30,8 +42,13 @@
             url: "https://cisco.box.com/shared/static/ymbuwvt2qprs4tquextw75b82hyaxwon.deb",
             dest: /tmp/ovs-switch.deb
           }
+      when: ansible_os_family == "Debian"
     - apt: "deb=/tmp/ovs-common.deb"
+      when: ansible_os_family == "Debian"
     - apt: "deb=/tmp/ovs-switch.deb"
+      when: ansible_os_family == "Debian"
+    - service: "name=openvswitch enabled=yes state=started"
+      when: ansible_os_family == "RedHat"
     - shell: "ovs-vsctl set-manager {{ item }}"
       with_items:
         - "tcp:127.0.0.1:6640"
