@@ -53,6 +53,16 @@
       "keep_input_artifact": false,
       "output": "box/ubuntu1510.box",
       "type": "vagrant"
+    },
+    {
+      "type": "atlas",
+      "token": "{{ user `atlas_token` }}",
+      "artifact": "contiv/ubuntu1510-netplugin",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "virtualbox",
+        "version": "{{ user `version` }}"
+      }
     }
   ],
   "provisioners": [
@@ -106,6 +116,7 @@
     "ssh_fullname": "vagrant",
     "ssh_username": "vagrant",
     "ssh_password": "vagrant",
-    "version": "0.1.0"
+    "version": "{{ env `version` }}",
+    "atlas_token": "{{ env `atlas_token` }}"
   }
 }

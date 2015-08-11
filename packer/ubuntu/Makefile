@@ -12,7 +12,7 @@ stop:
 restart: stop start
 
 build: rmcache
-	packer build --force ubuntu1510.json
+	version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --force ubuntu1510.json
 
 # XXX this is to work around a packer issue that causes the vbox startup to
 # fail every time it's run after the first time.
