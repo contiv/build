@@ -1,7 +1,7 @@
 all: stop build add start 
 
 add:
-	vagrant box add ubuntu1510 box/ubuntu1510.box --force
+	vagrant box add ubuntu1510 box/ubuntu1510-netplugin.box --force
 
 start:
 	vagrant up

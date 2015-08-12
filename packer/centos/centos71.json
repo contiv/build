@@ -39,7 +39,7 @@
       "vm_name": "centos71"
     }
   ],
-  "post-processors": [
+  "post-processors": [[
     {
       "keep_input_artifact": false,
       "output": "box/centos71.box",
@@ -55,7 +55,7 @@
         "version": "{{ user `version` }}"
       }
     }
-  ],
+  ]],
   "provisioners": [
     {
       "environment_vars": [
