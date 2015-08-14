@@ -10,7 +10,7 @@ stop:
 	vagrant destroy -f
 
 build:
-	packer build --force centos71.json
+	version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --force centos71.json
 
 ssh: start
 	vagrant ssh

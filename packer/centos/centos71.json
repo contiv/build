@@ -26,7 +26,7 @@
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "4096"
+          "2048"
         ],
         [
           "modifyvm",
@@ -39,13 +39,23 @@
       "vm_name": "centos71"
     }
   ],
-  "post-processors": [
+  "post-processors": [[
     {
       "keep_input_artifact": false,
       "output": "box/centos71.box",
       "type": "vagrant"
+    },
+    {
+      "type": "atlas",
+      "token": "{{ user `atlas_token` }}",
+      "artifact": "contiv/centos71-netplugin",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "virtualbox",
+        "version": "{{ user `version` }}"
+      }
     }
-  ],
+  ]],
   "provisioners": [
     {
       "environment_vars": [
@@ -97,6 +107,8 @@
     "no_proxy": "{{env `no_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
     "ssh_password": "vagrant",
-    "ssh_username": "vagrant"
+    "ssh_username": "vagrant",
+    "atlas_token": "{{ env `atlas_token` }}",
+    "version": "{{ env `version` }}"
   }
 }
