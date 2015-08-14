@@ -12,5 +12,5 @@ stop:
 build:
 	packer build --force centos71.json
 
-ssh:
+ssh: start
 	vagrant ssh

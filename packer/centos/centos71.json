@@ -26,13 +26,13 @@
           "modifyvm",
           "{{.Name}}",
           "--memory",
-          "512"
+          "4096"
         ],
         [
           "modifyvm",
           "{{.Name}}",
           "--cpus",
-          "1"
+          "4"
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
@@ -68,14 +68,25 @@
         "script/kernel-docker.sh",
         "script/docker.sh",
         "script/vmtool.sh",
-        "script/cleanup.sh"
+        "script/ansible.sh"
       ],
       "type": "shell"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "../../ansible/netplugin/site.yml"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "script/cleanup.sh"
+      ]
     }
   ],
   "variables": {
     "ftp_proxy": "{{env `ftp_proxy`}}",
-    "headless": "",
+    "headless": "true",
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
