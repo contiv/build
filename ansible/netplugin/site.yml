@@ -21,9 +21,9 @@
       when: ansible_os_family == "RedHat"
     - shell: creates=/usr/local/go/bin/go curl -L https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz | tar -xvz -C /usr/local
     - get_url: 
-        url: https://github.com/coreos/etcd/releases/download/v2.0.0/etcd-v2.0.0-linux-amd64.tar.gz
+        url: https://github.com/coreos/etcd/releases/download/v2.1.1/etcd-v2.1.1-linux-amd64.tar.gz
         dest: /tmp/etcd.tar.gz
-    - shell: creates=/usr/bin/etcd tar vxzf /tmp/etcd.tar.gz && mv etcd-v2.0.0-linux-amd64/etcd* /usr/bin
+    - shell: creates=/usr/bin/etcd tar vxzf /tmp/etcd.tar.gz && mv etcd-v2.1.1-linux-amd64/etcd* /usr/bin
     - shell: creates=/usr/bin/docker curl https://get.docker.com | bash
     - lineinfile:
         create: yes
