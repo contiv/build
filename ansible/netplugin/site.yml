@@ -10,6 +10,10 @@
         - curl
         - python-software-properties
         - git 
+        - mercurial
+        - build-essential
+        - perl
+        - librbd-dev
       when: ansible_os_family == "Debian"
     - yum: "update_cache=yes name={{ item }}"
       with_items:
@@ -17,7 +21,11 @@
         - vim
         - curl
         - git
+        - mercurial
         - openvswitch
+        - gcc
+        - perl
+        - librbd1-devel
       when: ansible_os_family == "RedHat"
     - shell: creates=/usr/local/go/bin/go curl -L https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz | tar -xvz -C /usr/local
     - get_url: 
