@@ -17,6 +17,7 @@
       when: ansible_os_family == "Debian"
     - yum: "update_cache=yes name={{ item }}"
       with_items:
+        - ntp
         - unzip
         - vim
         - curl
@@ -26,6 +27,8 @@
         - gcc
         - perl
         - librbd1-devel
+      when: ansible_os_family == "RedHat"
+    - shell: systemctl enable ntpd
       when: ansible_os_family == "RedHat"
     - shell: creates=/usr/local/go/bin/go curl -L https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz | tar -xvz -C /usr/local
     - get_url: 
