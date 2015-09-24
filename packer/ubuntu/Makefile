@@ -11,8 +11,11 @@ stop:
 
 restart: stop start
 
-build:
+build: download
 	version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --force ubuntu1504.json
+
+download:
+	bash download-kernel.sh
 
 # XXX this is to work around a packer issue that causes the vbox startup to
 # fail every time it's run after the first time.
