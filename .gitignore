@@ -4,3 +4,4 @@ output-virtualbox-iso
 *.box
 *.ovf
 .vagrant
+*.swp

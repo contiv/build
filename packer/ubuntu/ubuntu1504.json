@@ -98,7 +98,9 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "../../ansible/netplugin/site.yml"
+      "playbook_dir": "../../ansible",
+      "playbook_file": "../../ansible/site.yml",
+      "inventory_groups": "devtest"
     },
     {
       "type": "shell",
