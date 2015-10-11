@@ -16,6 +16,7 @@
     - build-essential
     - perl
     - librbd-dev
+    - lshw
   when: ansible_os_family == "Debian"
 - name: install base packages (redhat)
   yum: "update_cache=yes name={{ item }}"
@@ -30,6 +31,7 @@
     - gcc
     - perl
     - librbd1-devel
+    - lshw
   when: ansible_os_family == "RedHat"
 - name: install and start ntp
   shell: systemctl enable ntpd
@@ -87,8 +89,14 @@
   get_url: 
     url: https://dl.bintray.com/mitchellh/consul/0.5.2_linux_amd64.zip
     dest: /tmp/consul.zip
-- name: install consule
+- name: install consul
   shell: "chdir=/tmp creates=/usr/bin/consul unzip /tmp/consul.zip && mv /tmp/consul /usr/bin"
+- name: download serf binary
+  get_url:
+    url: https://dl.bintray.com/mitchellh/serf/0.6.4_linux_amd64.zip
+    dest: /tmp/0.6.4_linux_amd64.zip
+- name: install serf
+  shell: "chdir=/tmp creates=/usr/bin/serf unzip /tmp/0.6.4_linux_amd64.zip && mv /tmp/serf /usr/bin"
 #- name: setup systemd files for services
 #  copy: src=files/{{ item }} dest=/etc/default/{{ item }}
 #  with_items:
