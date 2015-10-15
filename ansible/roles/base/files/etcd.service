@@ -1,8 +1,0 @@
-[Unit]
-Description=Etcd
-After=auditd.service systemd-user-sessions.service time-sync.target
-
-[Service]
-EnvironmentFile=/etc/default/etcd
-ExecStart=/usr/bin/etcd --data-dir /var/lib/etcd --listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001 --advertise-client-urls=http://${NODE_ADDR}:2379,http://${NODE_ADDR}:4001 --initial-advertise-peer-urls=http://${NODE_ADDR}:2380,http://${NODE_ADDR}:7001 --listen-peer-urls=http://${NODE_ADDR}:2380 --initial-cluster default=http://${NODE_ADDR}:2380,default=http://${NODE_ADDR}:7001,${NODE_PEERS} --initial-cluster-state=new
-KillMode=process

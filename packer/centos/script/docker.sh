@@ -5,7 +5,7 @@ yum install -y epel-release
 cat /etc/resolv.conf
 cat /etc/redhat-release
 
-curl https://get.docker.com | sudo sh
+curl https://get.docker.com | sudo -E sh
 
 # Add the connected "${USER}" to the docker group.
 gpasswd -a ${USER} docker

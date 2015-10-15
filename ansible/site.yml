@@ -7,5 +7,20 @@
 # we can use it as replacement for 'contiv/lab' with some more refinements
 - hosts: devtest
   sudo: true
+  environment: env
   roles:
   - base
+
+# service-master hosts correspond to cluster machines that run the master/controller
+# logic of the infra services
+- hosts: service-master
+  sudo: true
+  roles:
+  - etcd
+
+# service-worker hosts correspond to cluster machines that run the worker/driver
+# logic of the infra services.
+- hosts: service-worker
+  sudo: true
+  roles:
+  - etcd
