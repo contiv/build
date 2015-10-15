@@ -7,6 +7,7 @@
 # we can use it as replacement for 'contiv/lab' with some more refinements
 - hosts: devtest
   sudo: true
+  environment: env
   roles:
   - base
 

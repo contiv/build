@@ -15,4 +15,6 @@ apt-get -y dist-upgrade --force-yes
 
 dpkg -i /tmp/*.deb
 
+echo "==> Rebooting the vm"
 reboot
+sleep 60
