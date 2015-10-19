@@ -20,7 +20,7 @@ case $1 in
 start)
     ONLINE_MASTER_ADDR={{ online_master_addr }}
     # if a master address is provided then we need to ad dthe node to existing cluster
-    if [ "$ONLINE_MASTER_ADDR" != "" ]; then
+    if [ "$ONLINE_MASTER_ADDR" != "" -a "$ONLINE_MASTER_ADDR" != "{{ node_addr }}" ]; then
         # XXX: There seems an issue using etcdctl with ETCD_INITIAL_ADVERTISE_PEER_URLS so passing
         # ETCD_LISTEN_PEER_URLS for now
         out=`etcdctl --peers="{{ online_master_addr }}:2379,{{ online_master_addr }}:4001" \
