@@ -15,6 +15,12 @@ echo "==> Add the connected "${USER}" to the docker group."
 gpasswd -a ${USER} docker
 gpasswd -a ${SSH_USERNAME} docker
 
+service docker stop
+echo "==> Cleaning up Docker directory"
+rm -rf /var/lib/docker/*
+echo "==> Configuring Docker daemon"
+sed -i "s/daemon -H/daemon -s overlay -H/g" /usr/lib/systemd/system/docker.service
+systemctl daemon-reload
 echo "==> Starting docker"
 service docker start
 echo "==> Enabling docker to start on reboot"
