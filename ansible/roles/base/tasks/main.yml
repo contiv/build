@@ -54,8 +54,14 @@
   copy:
     dest: /etc/profile.d/00golang.sh
     content: "export PATH=/opt/golang/bin:/usr/local/go/bin:$PATH\nexport GOPATH=/opt/golang"
-- name: install docker
-  shell: creates=/usr/bin/docker curl https://experimental.docker.com | bash
+- name: download docker experimental
+  get_url:
+    validate_certs: no
+    url: https://cisco.box.com/shared/static/9r00qhrbjf9j5cuk1dubbdd0wyfya5jh.deb
+    dest: /tmp/docker-experimental.deb
+- name: install docker experimental
+  apt: "deb=/tmp/docker-experimental.deb"
+  when: ansible_os_family == "Debian"
 - name: update docker config
   lineinfile:
     create: yes
@@ -63,7 +69,7 @@
     line: ". /etc/profile.d/00golang.sh && . /etc/profile.d/envvar.sh"
 - name: add vagrant user to docker group
   user: name=vagrant groups=docker append=yes
-- name: download and install swarm
+- name: download  and install swarm binary
   get_url:
     validate_certs: no
     url: https://cisco.box.com/shared/static/isn9te95op8qgmz9o0al45eps2zmfz7c
@@ -85,10 +91,10 @@
       }
   when: ansible_os_family == "Debian"
 - name: install ovs-common (debian)
-  apt: "deb=/tmp/ovs-common.deb"
+  apt: "deb=/tmp/ovs-common.deb force=yes"
   when: ansible_os_family == "Debian"
 - name: install ovs (debian)
-  apt: "deb=/tmp/ovs-switch.deb"
+  apt: "deb=/tmp/ovs-switch.deb force=yes"
   when: ansible_os_family == "Debian"
 - name: start ovs service
   service: "name=openvswitch enabled=yes state=started"
