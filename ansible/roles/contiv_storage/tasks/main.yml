@@ -23,7 +23,7 @@
   when: run_as == "master"
 
 - name: start volmaster
-  service: name=volmaster state=started
+  service: name=volmaster state=restarted
   when: run_as == "master"
 
 - name: copy environment file for volsupervisor
@@ -35,14 +35,14 @@
   when: run_as == "master"
 
 - name: start volsupervisor
-  service: name=volsupervisor state=started
+  service: name=volsupervisor state=restarted
   when: run_as == "master"
 
 - name: copy environment file for volplugin
-  copy: src=volplugin dest=/etc/default/volplugin
+  template: src=volplugin.j2 dest=/etc/default/volplugin
 
 - name: copy systemd units for volplugin
   copy: src=volplugin.service dest=/etc/systemd/system/volplugin.service
 
 - name: start volplugin
-  service: name=volplugin state=started
+  service: name=volplugin state=restarted
