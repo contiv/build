@@ -36,7 +36,7 @@
   environment: env
   roles:
   - { role: docker }
-  - { role: etcd }
+  - { role: etcd, run_as: master }
   - { role: swarm, run_as: master }
   - { role: contiv_network, run_as: master }
   - { role: contiv_storage, run_as: master }
@@ -48,7 +48,7 @@
   environment: env
   roles:
   - { role: docker }
-  - { role: etcd }
+  - { role: etcd, run_as: worker }
   - { role: swarm, run_as: worker }
   - { role: contiv_network, run_as: worker }
   - { role: contiv_storage, run_as: worker }
