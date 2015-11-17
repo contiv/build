@@ -31,7 +31,7 @@
   - { role: docker }
   - { role: etcd, run_as: master }
   - { role: ceph-mon, mon_group_name: service-master }
-  - { role: ceph-osd, osd_group_name: service-master }
+  - { role: ceph-osd, mon_group_name: service-master, osd_group_name: service-master }
   - { role: swarm, run_as: master }
   - { role: contiv_network, run_as: master }
   - { role: contiv_storage, run_as: master }
