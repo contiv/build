@@ -39,7 +39,7 @@
   when: run_as == "master"
 
 - name: setup netmaster host alias on workers
-  shell: echo "{{ online_master_addr }} netmaster" >> /etc/hosts
+  shell: echo "{{ master_addr }} netmaster" >> /etc/hosts
   when: run_as == "worker"
 
 # XXX: need to move the following to correct roles
