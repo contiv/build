@@ -28,6 +28,7 @@
   sudo: true
   environment: env
   roles:
+  - { role: ucarp }
   - { role: docker }
   - { role: etcd, run_as: master }
   - { role: ceph-mon, mon_group_name: service-master }
