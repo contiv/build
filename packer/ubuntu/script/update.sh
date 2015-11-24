@@ -13,7 +13,8 @@ apt-get -y update
 echo "==> Performing dist-upgrade (all packages and kernel)"
 apt-get -y dist-upgrade --force-yes
 
-dpkg -i /tmp/*.deb
+echo "==> Install devel + build packages"
+apt-get -y install build-essential
 
 echo "==> Rebooting the vm"
 reboot

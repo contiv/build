@@ -8,13 +8,7 @@ echo "==> Installing VirtualBox guest additions"
 # kernel-headers-$(uname -r) kernel-devel-$(uname -r) gcc make perl
 # from the install media via ks.cfg
 
-VBOX_VERSION=$(cat $SSH_USER_HOME/.vbox_version)
-mount -o loop $SSH_USER_HOME/VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+mount -o loop $SSH_USER_HOME/VBoxGuestAdditions.iso /mnt
 sh /mnt/VBoxLinuxAdditions.run --nox11
 umount /mnt
-rm -rf $SSH_USER_HOME/VBoxGuestAdditions_$VBOX_VERSION.iso
-rm -f $SSH_USER_HOME/.vbox_version
-
-if [[ $VBOX_VERSION = "4.3.10" ]]; then
-    ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions
-fi
+rm -rf $SSH_USER_HOME/VBoxGuestAdditions.iso

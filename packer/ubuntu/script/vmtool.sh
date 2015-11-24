@@ -57,16 +57,10 @@ if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
     # Assuming the following packages are installed
     apt-get install -y linux-headers-$(uname -r) build-essential perl dkms
 
-    VBOX_VERSION=$(cat /home/${SSH_USER}/.vbox_version)
-    mount -o loop /home/${SSH_USER}/VBoxGuestAdditions_$VBOX_VERSION.iso /mnt
+    mount -o loop /home/${SSH_USER}/VBoxGuestAdditions.iso /mnt
     /mnt/VBoxLinuxAdditions.run --nox11
     umount /mnt
-    rm /home/${SSH_USER}/VBoxGuestAdditions_$VBOX_VERSION.iso
-    rm /home/${SSH_USER}/.vbox_version
-
-    if [[ $VBOX_VERSION = "4.3.10" ]]; then
-        ln -s /opt/VBoxGuestAdditions-4.3.10/lib/VBoxGuestAdditions /usr/lib/VBoxGuestAdditions
-    fi
+    rm /home/${SSH_USER}/VBoxGuestAdditions.iso
 fi
 
 if [[ $PACKER_BUILDER_TYPE =~ parallels ]]; then

@@ -1,2 +1,2 @@
-yum install -y python-devel python-pip
-pip install ansible
+yum install -y epel-release
+yum install -y ansible
