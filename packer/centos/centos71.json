@@ -124,8 +124,8 @@
     },
     {
       "type": "ansible-local",
-      "playbook_dir": "../../ansible",
-      "playbook_file": "../../ansible/site.yml",
+      "playbook_dir": "../../vendor/ansible",
+      "playbook_file": "../../vendor/ansible/site.yml",
       "inventory_groups": "devtest",
       "extra_arguments": [
         "--extra-vars",

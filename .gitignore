@@ -1,6 +1,8 @@
 *.iso
 packer_cache
 output-virtualbox-iso
+output-build
+output-release
 *.box
 *.ovf
 .vagrant
