@@ -8,13 +8,11 @@ Things you will need:
 
 ### filesystem layout
 
-* `packer`
+* `packer`: in here lives packer templates.
   * `centos`
-    * in here lives the packer templates for centos.
   * `ubuntu`
-    * in here lives the packer templates for ubuntu.
-* `ansible`
-  * in here lives the ansible that powers all the images.
+* `vendor`: carried code from other repositories
+  * `ansible`: in here lives the ansible that powers all the images.
 
 Type `make` in any of the packer subdirectories to build and publish an image.
 Typing `make` at the `packer` level will build all the images.
