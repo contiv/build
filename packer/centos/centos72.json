@@ -1,14 +1,12 @@
 {
   "builders": [
     {
-      "name": "release",
+      "name": "build-vmware",
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/ks7.cfg<enter>"
       ],
       "disk_size": 65536,
-      "guest_additions_path": "VBoxGuestAdditions.iso",
-      "guest_os_type": "RedHat_64",
-      "hard_drive_interface": "sata",
+      "guest_os_type": "centos-64",
       "headless": "{{ user `headless` }}",
       "http_directory": "http",
       "iso_checksum": "{{ user `iso_checksum` }}",
@@ -21,26 +19,45 @@
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_wait_timeout": "10000s",
-      "type": "virtualbox-iso",
-      "vboxmanage": [
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--memory",
-          "2048"
-        ],
-        [
-          "modifyvm",
-          "{{.Name}}",
-          "--cpus",
-          "4"
-        ]
-      ],
-      "virtualbox_version_file": ".vbox_version",
-      "vm_name": "centos71"
+      "tools_upload_flavor": "linux",
+      "type": "vmware-iso",
+      "vm_name": "centos72",
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "2048",
+        "numvcpus": "4"
+      }
     },
     {
-      "name": "build",
+      "name": "release-vmware",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/ks7.cfg<enter>"
+      ],
+      "disk_size": 65536,
+      "guest_os_type": "centos-64",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "http",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_wait_timeout": "10000s",
+      "tools_upload_flavor": "linux",
+      "type": "vmware-iso",
+      "vm_name": "centos72",
+      "vmx_data": {
+        "cpuid.coresPerSocket": "1",
+        "memsize": "2048",
+        "numvcpus": "4"
+      }
+    },
+    {
+      "name": "release-virtualbox",
       "boot_command": [
         "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/ks7.cfg<enter>"
       ],
@@ -76,25 +93,75 @@
         ]
       ],
       "virtualbox_version_file": ".vbox_version",
-      "vm_name": "centos71"
+      "vm_name": "centos72"
+    },
+    {
+      "name": "build-virtualbox",
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort}}/ks7.cfg<enter>"
+      ],
+      "disk_size": 65536,
+      "guest_additions_path": "VBoxGuestAdditions.iso",
+      "guest_os_type": "RedHat_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "http",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_wait_timeout": "10000s",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "4"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "centos72"
     }
   ],
   "post-processors": [[
     {
       "keep_input_artifact": false,
-      "output": "box/centos71.box",
+      "output": "box/centos72.{{ .Provider }}.box",
       "type": "vagrant"
     },
     {
       "type": "atlas",
       "token": "{{ user `atlas_token` }}",
-      "artifact": "contiv/centos71-netplugin",
+      "artifact": "contiv/centos72",
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "virtualbox",
         "version": "{{ user `version` }}"
       },
-      "only": ["release"]
+      "only": ["release-virtualbox"]
+    },
+    {
+      "type": "atlas",
+      "token": "{{ user `atlas_token` }}",
+      "artifact": "contiv/centos72",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "vmware_desktop",
+        "version": "{{ user `version` }}"
+      },
+      "only": ["release-vmware"]
     }
   ]],
   "provisioners": [
@@ -114,11 +181,14 @@
       "scripts": [
         "script/fix-slow-dns.sh",
         "script/sshd.sh",
-        "script/vagrant.sh",
         "script/update.sh",
-        "script/docker.sh",
-        "script/vmtool.sh",
-        "script/ansible.sh"
+        "script/vagrant.sh",
+        "script/desktop.sh",
+        "script/vmware.sh",
+        "script/virtualbox.sh",
+        "script/parallels.sh",
+        "script/cmtool.sh",
+        "script/cleanup.sh"
       ],
       "type": "shell"
     },
@@ -146,10 +216,9 @@
     "http_proxy": "{{env `http_proxy`}}",
     "https_proxy": "{{env `https_proxy`}}",
     "install_vagrant_key": "true",
-    "iso_checksum": "1795184136b8bdddabe50453cc2cc2d46f0f7c5e",
-    "iso_name": "CentOS-7-x86_64-DVD-1503-01.iso",
-    "iso_path": "iso",
-    "iso_url": "http://mirrors.sonic.net/centos/7.1.1503/isos/x86_64/CentOS-7-x86_64-DVD-1503-01.iso",
+    "iso_checksum": "4c6c65b5a70a1142dadb3c65238e9e97253c0d3a",
+    "iso_name": "CentOS-7-x86_64-DVD-1511.iso",
+    "iso_url": "http://mirrors.sonic.net/centos/7.2.1511/isos/x86_64/CentOS-7-x86_64-DVD-1511.iso",
     "no_proxy": "{{env `no_proxy`}}",
     "rsync_proxy": "{{env `rsync_proxy`}}",
     "ssh_password": "vagrant",

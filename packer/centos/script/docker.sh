@@ -1,18 +1,19 @@
 #!/bin/bash
 
-echo "==> Adding EPEL repo"
-yum install -y epel-release
-cat /etc/resolv.conf
-cat /etc/redhat-release
+if [[ ! "$DOCKER" =~ ^(true|yes|on|1|TRUE|YES|ON])$ ]]; then
+  exit
+fi
 
-curl https://get.docker.com | sudo -E bash
-curl https://get.docker.com/builds/Linux/x86_64/docker-1.9.0 -o /usr/bin/docker
+echo "==> Run the Docker installation script"
+curl -sSL https://get.docker.com | sh
 
-# Add the connected "${USER}" to the docker group.
+echo "==> Create the docker group"
+# Add the docker group if it doesn't already exist
+groupadd docker
+
+echo "==> Add the connected "${USER}" to the docker group."
 gpasswd -a ${USER} docker
 gpasswd -a ${SSH_USERNAME} docker
-
-echo ". /etc/profile.d/envvar.sh" >>/etc/sysconfig/docker
 
 echo "==> Starting docker"
 service docker start
