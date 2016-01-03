@@ -4,6 +4,8 @@ SSH_USER=${SSH_USERNAME:-vagrant}
 SSH_USER_HOME=${SSH_USER_HOME:-/home/${SSH_USER}}
 
 if [[ $PACKER_BUILDER_TYPE =~ virtualbox ]]; then
+    set -e
+
     echo "==> Installing VirtualBox guest additions"
     # Assume that we've installed all the prerequisites:
     # kernel-headers-$(uname -r) kernel-devel-$(uname -r) gcc make perl
