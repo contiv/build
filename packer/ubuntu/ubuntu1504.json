@@ -151,7 +151,9 @@
       "inventory_groups": "devtest",
       "extra_arguments": [
         "--extra-vars",
-        "'{\"env\":{ \"http_proxy\":\"{{user `http_proxy`}}\", \"https_proxy\":\"{{user `https_proxy`}}\", \"no_proxy\":\"{{user `no_proxy`}}\", \"ftp_proxy\":\"{{user `ftp_proxy`}}\", \"rsync_proxy\":\"{{user `rsync_proxy`}}\" }}'"
+        "'{\"env\":{ \"http_proxy\":\"{{user `http_proxy`}}\", \"https_proxy\":\"{{user `https_proxy`}}\", \"no_proxy\":\"{{user `no_proxy`}}\", \"ftp_proxy\":\"{{user `ftp_proxy`}}\", \"rsync_proxy\":\"{{user `rsync_proxy`}}\" }, \"validate_certs\":\"no\"}'",
+        "--tags",
+        "prebake-for-dev"
       ]
     },
     {
