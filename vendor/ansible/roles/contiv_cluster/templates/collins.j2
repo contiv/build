@@ -10,7 +10,14 @@ case $1 in
 start)
     set -e
 
-    /usr/bin/docker run -t -p {{ collins_host_port }}:{{ collins_guest_port }} --name collins tumblr/collins
+    /usr/bin/docker run -t -p {{ collins_host_port }}:{{ collins_guest_port }} \
+        --name collins {{ collins_image }}
+    ;;
+
+stop)
+    # skipping `set -e` as we shouldn't stop on error
+    /usr/bin/docker stop collins
+    /usr/bin/docker rm collins
     ;;
 
 *)
