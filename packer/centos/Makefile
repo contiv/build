@@ -2,7 +2,7 @@ all: stop build add start
 
 add:
 	vagrant box add contiv/centos72 box/centos72.virtualbox.box --force --provider virtualbox
-	vagrant box add contiv/centos72 box/centos72.vmware.box --force --provider vmware
+	vagrant box add contiv/centos72 box/centos72.vmware.box --force --provider vmware_desktop
 
 start:
 	vagrant up
