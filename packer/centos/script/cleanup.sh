@@ -66,6 +66,10 @@ if [ $(ls | wc -w) -gt 16 ]; then
 fi
 popd
 
+echo "==> Remove old kernels and keep only the latest one"
+yum -y install yum-utils
+package-cleanup --oldkernels --count=1
+
 echo "==> Remove packages needed for building guest tools"
 yum -y remove gcc cpp libmpc mpfr kernel-devel kernel-headers perl
 
