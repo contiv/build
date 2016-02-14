@@ -92,6 +92,10 @@ echo '==> Zeroing out empty area to save space in the final image'
 dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit code $? is suppressed"
 rm -f /EMPTY
 
+# Zero out boot as well
+dd if=/dev/zero of=/boot/EMPTY bs=1M || echo "dd exit code $? is suppressed"
+rm -f /boot/EMPTY
+
 # Block until the empty file has been removed, otherwise, Packer
 # will try to kill the box while the disk is still full and that's bad
 sync
