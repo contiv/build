@@ -183,11 +183,9 @@
         "script/sshd.sh",
         "script/update.sh",
         "script/vagrant.sh",
-        "script/desktop.sh",
         "script/vmware.sh",
         "script/virtualbox.sh",
-        "script/parallels.sh",
-        "script/cmtool.sh"
+        "script/ansible.sh"
       ],
       "type": "shell"
     },
