@@ -187,8 +187,7 @@
         "script/vmware.sh",
         "script/virtualbox.sh",
         "script/parallels.sh",
-        "script/cmtool.sh",
-        "script/cleanup.sh"
+        "script/cmtool.sh"
       ],
       "type": "shell"
     },

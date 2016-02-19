@@ -66,6 +66,10 @@ if [ $(ls | wc -w) -gt 16 ]; then
 fi
 popd
 
+echo "==> Remove old kernels and keep only the latest one"
+yum -y install yum-utils
+package-cleanup --oldkernels --count=1
+
 echo "==> Remove packages needed for building guest tools"
 yum -y remove gcc cpp libmpc mpfr kernel-devel kernel-headers perl
 
@@ -87,6 +91,10 @@ echo '==> Zeroing out empty area to save space in the final image'
 # zeroed space compresses down to nothing.
 dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit code $? is suppressed"
 rm -f /EMPTY
+
+# Zero out boot as well
+dd if=/dev/zero of=/boot/EMPTY bs=1M || echo "dd exit code $? is suppressed"
+rm -f /boot/EMPTY
 
 # Block until the empty file has been removed, otherwise, Packer
 # will try to kill the box while the disk is still full and that's bad
