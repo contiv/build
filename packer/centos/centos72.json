@@ -205,6 +205,7 @@
       "type": "shell",
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
       "scripts": [
+        "script/docker-backup.sh",
         "script/cleanup.sh"
       ]
     }
