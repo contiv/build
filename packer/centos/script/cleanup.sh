@@ -71,7 +71,7 @@ yum -y install yum-utils
 package-cleanup --oldkernels --count=1
 
 echo "==> Remove packages needed for building guest tools"
-yum -y remove gcc cpp libmpc mpfr kernel-devel kernel-headers perl
+yum -y remove cpp libmpc mpfr kernel-devel kernel-headers
 
 echo "==> Clean up yum cache of metadata and packages to save space"
 yum -y --enablerepo='*' clean all
