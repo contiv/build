@@ -14,7 +14,7 @@ build:
 	version=$$(cat VERSION) atlas_token="dummy" packer build --only build-vmware,build-virtualbox --force centos72.json
 
 release-build:
-	version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --only release-vmware,release-virtualbox --force centos72.json
+	changelog=${GITHUB_RELEASE_URL} version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --only release-vmware,release-virtualbox --force centos72.json
 
 ssh: start
 	vagrant ssh
