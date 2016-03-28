@@ -117,7 +117,7 @@
       "metadata": {
         "provider": "virtualbox",
         "version": "{{ user `version` }}",
-        "changelog": "{{ user `changelog` }}"
+        "description_markdown": "[changelog]({{ user `changelog` }})"
       },
       "only": ["release"]
     }
