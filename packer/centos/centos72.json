@@ -148,7 +148,8 @@
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "virtualbox",
-        "version": "{{ user `version` }}"
+        "version": "{{ user `version` }}",
+        "changelog": "{{ user `changelog` }}"
       },
       "only": ["release-virtualbox"]
     },
@@ -159,7 +160,8 @@
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "vmware_desktop",
-        "version": "{{ user `version` }}"
+        "version": "{{ user `version` }}",
+        "changelog": "{{ user `changelog` }}"
       },
       "only": ["release-vmware"]
     }
@@ -224,6 +226,7 @@
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "atlas_token": "{{ env `atlas_token` }}",
-    "version": "{{ env `version` }}"
+    "version": "{{ env `version` }}",
+    "changelog": "{{ env `changelog` }} "
   }
 }

@@ -116,7 +116,8 @@
       "artifact_type": "vagrant.box",
       "metadata": {
         "provider": "virtualbox",
-        "version": "{{ user `version` }}"
+        "version": "{{ user `version` }}",
+        "changelog": "{{ user `changelog` }}"
       },
       "only": ["release"]
     }
@@ -186,7 +187,8 @@
     "ssh_password": "vagrant",
     "ssh_username": "vagrant",
     "update": "false",
-    "version": "{{env `version`}}"
+    "version": "{{env `version`}}",
+    "changelog": "{{ env `changelog` }}"
   }
 }
 

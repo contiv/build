@@ -15,7 +15,7 @@ build:
 	version=$$(cat VERSION) atlas_token="dummy" packer build --only build --force ubuntu1504.json
 
 release-build:
-	version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --only release --force ubuntu1504.json
+	changelog=${GITHUB_RELEASE_URL} version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --only release --force ubuntu1504.json
 
 # XXX this is to work around a packer issue that causes the vbox startup to
 # fail every time it's run after the first time.
