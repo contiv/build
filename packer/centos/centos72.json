@@ -149,7 +149,7 @@
       "metadata": {
         "provider": "virtualbox",
         "version": "{{ user `version` }}",
-        "description_markdown": "[changelog]({{ user `changelog` }})"
+        "description": "{{ user `changelog` }}"
       },
       "only": ["release-virtualbox"]
     },
@@ -161,7 +161,7 @@
       "metadata": {
         "provider": "vmware_desktop",
         "version": "{{ user `version` }}",
-        "description_markdown": "[changelog]({{ user `changelog` }})"
+        "description": "{{ user `changelog` }}"
       },
       "only": ["release-vmware"]
     }
