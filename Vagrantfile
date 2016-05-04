@@ -21,11 +21,11 @@ Vagrant.configure(2) do |config|
   config.ssh.insert_key = false # workaround for https://github.com/mitchellh/vagrant/issues/5048
 
   config.vm.define "centos" do |centos|
-    centos.vm.box = "contiv/centos71-netplugin"
+    centos.vm.box = "contiv/centos72"
   end
 
   config.vm.define "ubuntu" do |ubuntu|
-    ubuntu.vm.box = "contiv/ubuntu1504-netplugin"
+    ubuntu.vm.box = "contiv/ubuntu1504"
     # so it only runs once
     ubuntu.vm.provision 'ansible', &ansible_provision
   end
