@@ -1,0 +1,85 @@
+{
+  "builders": [
+    {
+      "name": "build",
+      "type": "docker",
+      "image": "contiv/centos-systemd:latest",
+      "pull": true,
+      "commit": true,
+      "volumes": {
+          "/sys/fs/cgroup":"/sys/fs/cgroup:ro",
+          "/tmp/$(mktemp -d)":"/run"
+      },
+      "run_command": ["--privileged", "-d", "-i", "-t", "{{.Image}}", "/usr/sbin/init"]
+    },
+    {
+      "name": "release",
+      "type": "docker",
+      "image": "contiv/centos-systemd:latest",
+      "pull": true,
+      "commit": true,
+      "volumes": {
+          "/sys/fs/cgroup":"/sys/fs/cgroup:ro",
+          "/tmp/systemdtest":"/run"
+      },
+      "run_command": ["-privileged", "-d", "-i", "-t", "{{.Image}}", "/usr/sbin/init"]
+    }
+  ],
+  "post-processors": [[
+    {
+      "type": "docker-tag",
+      "repository": "contiv/centos7",
+      "tag": "{{ user `version` }}",
+      "only": ["build", "release"]
+    },
+    {
+      "type": "docker-push",
+      "only": ["release"]
+    }
+  ]],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "rsync_proxy={{user `rsync_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "scripts": [
+        "../../centos/script/ansible.sh",
+        "script/packer.sh"
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_dir": "../../../vendor/ansible",
+      "playbook_file": "../../../vendor/ansible/site.yml",
+      "inventory_groups": "devtest",
+      "extra_arguments": [
+        "--extra-vars",
+        "'{\"env\":{ \"http_proxy\":\"{{user `http_proxy`}}\", \"https_proxy\":\"{{user `https_proxy`}}\", \"no_proxy\":\"{{user `no_proxy`}}\", \"ftp_proxy\":\"{{user `ftp_proxy`}}\", \"rsync_proxy\":\"{{user `rsync_proxy`}}\" }, \"validate_certs\":\"no\", \"docker_version\":\"1.11.1\"}'",
+        "--tags",
+        "prebake-for-dev,prebake-for-test"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "script/post_provision.sh"
+      ]
+    }
+  ],
+  "variables": {
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "no_proxy": "{{env `no_proxy`}}",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
+    "ssh_password": "vagrant",
+    "ssh_username": "vagrant",
+    "atlas_token": "{{ env `atlas_token` }}",
+    "version": "{{ env `version` }}"
+  }
+}
