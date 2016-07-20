@@ -1,0 +1,215 @@
+{
+  "builders": [
+    {
+      "name": "release",
+      "boot_command": [
+          "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "/install/vmlinuz<wait>",
+          " auto<wait>",
+          " console-setup/ask_detect=false<wait>",
+          " console-setup/layoutcode=us<wait>",
+          " console-setup/modelcode=pc105<wait>",
+          " debconf/frontend=noninteractive<wait>",
+          " debian-installer=en_US<wait>",
+          " fb=false<wait>",
+          " initrd=/install/initrd.gz<wait>",
+          " locale=en_US<wait>",
+          " kbd-chooser/method=us<wait>",
+          " keyboard-configuration/layout=USA<wait>",
+          " keyboard-configuration/variant=USA<wait>",
+          " grub-installer/bootdev=/dev/sda<wait>",
+          " noapic<wait>",
+          " net.ifnames=0<wait>",
+          " hostname={{ user `hostname` }}<wait>",
+          " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed-1604.cfg<wait>",
+          " -- <wait>",
+          "<enter><wait>"
+      ],
+      "disk_size": 65536,
+      "guest_additions_path": "VBoxGuestAdditions.iso",
+      "guest_os_type": "Ubuntu_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "http",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_wait_timeout": "10000s",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "4"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "ubuntu1604"
+    },
+    {
+      "name": "build",
+      "boot_command": [
+          "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+          "/install/vmlinuz<wait>",
+          " auto<wait>",
+          " console-setup/ask_detect=false<wait>",
+          " console-setup/layoutcode=us<wait>",
+          " console-setup/modelcode=pc105<wait>",
+          " debconf/frontend=noninteractive<wait>",
+          " debian-installer=en_US<wait>",
+          " fb=false<wait>",
+          " initrd=/install/initrd.gz<wait>",
+          " locale=en_US<wait>",
+          " kbd-chooser/method=us<wait>",
+          " keyboard-configuration/layout=USA<wait>",
+          " keyboard-configuration/variant=USA<wait>",
+          " grub-installer/bootdev=/dev/sda<wait>",
+          " noapic<wait>",
+          " net.ifnames=0<wait>",
+          " hostname={{ user `hostname` }}<wait>",
+          " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed-1604.cfg<wait>",
+          " -- <wait>",
+          "<enter><wait>"
+      ],
+      "disk_size": 65536,
+      "guest_additions_path": "VBoxGuestAdditions.iso",
+      "guest_os_type": "Ubuntu_64",
+      "hard_drive_interface": "sata",
+      "headless": "{{ user `headless` }}",
+      "http_directory": "http",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      "iso_urls": [
+        "{{ user `iso_path` }}/{{ user `iso_name` }}",
+        "{{ user `iso_url` }}"
+      ],
+      "shutdown_command": "echo '{{ user `ssh_password` }}'|sudo -S shutdown -P now",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_wait_timeout": "10000s",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "2048"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "4"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "ubuntu1604"
+    }
+  ],
+  "post-processors": [[
+    {
+      "keep_input_artifact": false,
+      "output": "box/ubuntu1604.box",
+      "type": "vagrant"
+    },
+    {
+      "type": "atlas",
+      "token": "{{ user `atlas_token` }}",
+      "artifact": "contiv/ubuntu1604",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "virtualbox",
+        "version": "{{ user `version` }}",
+        "description": "{{ user `changelog` }}"
+      },
+      "only": ["release"]
+    }
+  ]],
+  "provisioners": [
+    {
+      "environment_vars": [
+        "UPDATE=1",
+        "INSTALL_VAGRANT_KEY=1",
+        "SSH_USERNAME=vagrant",
+        "SSH_PASSWORD=vagrant",
+        "http_proxy={{user `http_proxy`}}",
+        "https_proxy={{user `https_proxy`}}",
+        "ftp_proxy={{user `ftp_proxy`}}",
+        "rsync_proxy={{user `rsync_proxy`}}",
+        "no_proxy={{user `no_proxy`}}"
+      ],
+      "execute_command": "echo '{{ user `ssh_password` }}' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "script/update.sh",
+        "script/vagrant.sh",
+        "script/sshd.sh",
+        "script/vmtool.sh",
+        "script/ansible.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_dir": "../../vendor/ansible",
+      "playbook_file": "../../vendor/ansible/site.yml",
+      "inventory_groups": "devtest",
+      "extra_arguments": [
+        "--extra-vars",
+        "'{\"env\":{ \"http_proxy\":\"{{user `http_proxy`}}\", \"https_proxy\":\"{{user `https_proxy`}}\", \"no_proxy\":\"{{user `no_proxy`}}\", \"ftp_proxy\":\"{{user `ftp_proxy`}}\", \"rsync_proxy\":\"{{user `rsync_proxy`}}\" }, \"validate_certs\":\"no\"}'",
+        "--tags",
+        "prebake-for-dev"
+      ]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "script/minimize.sh",
+        "script/cleanup.sh"
+      ]
+    }
+  ],
+  "variables": {
+    "cleanup_pause": "",
+    "cm": "nocm",
+    "cm_version": "",
+    "custom_script": ".",
+    "ftp_proxy": "{{env `ftp_proxy`}}",
+    "headless": "true",
+    "http_proxy": "{{env `http_proxy`}}",
+    "https_proxy": "{{env `https_proxy`}}",
+    "install_vagrant_key": "true",
+    "iso_checksum": "70db69379816b91eb01559212ae474a36ecec9ef",
+    "iso_name": "ubuntu-16.04-server-amd64.iso",
+    "iso_path": "iso",
+    "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04-server-amd64.iso",
+    "no_proxy": "{{env `no_proxy`}}",
+    "rsync_proxy": "{{env `rsync_proxy`}}",
+    "hostname": "vagrant",
+    "ssh_fullname": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_username": "vagrant",
+    "update": "false",
+    "version": "{{env `version`}}",
+    "changelog": "{{ env `changelog` }}"
+  }
+}
