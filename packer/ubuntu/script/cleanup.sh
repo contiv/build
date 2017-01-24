@@ -31,6 +31,9 @@ rm -rf /tmp/*
 apt-get -y autoremove --purge
 apt-get -y clean
 apt-get -y autoclean
+purge-old-kernels --keep 1 -qy
+kernel_version=$(uname -r)
+apt-get remove --purge -y $(dpkg -l | grep headers | grep -v generic | grep -v extra | grep -v ${kernel_version/-generic/} |  awk '{ print $2 }')
 
 echo "==> Installed packages"
 dpkg --get-selections | grep -v deinstall

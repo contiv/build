@@ -6,7 +6,7 @@ cd /var/docker_images
 images=$(sudo docker images | grep -v REPOSITORY | grep -v none | cut -d' ' -f1)
 for image in $images; do
  echo $image
- docker save $image > ${image/\//-}.tar
+ docker save $image > ${image//\//-}.tar
 done
 
 echo "==> Stopping docker"
