@@ -6,3 +6,6 @@ fetch/*
 
 #vagrant temp files
 .vagrant*
+
+terraform.tfstate*
+terraform.tfvars
