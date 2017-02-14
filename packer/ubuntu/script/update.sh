@@ -14,7 +14,10 @@ echo "==> Performing dist-upgrade (all packages and kernel)"
 apt-get -y dist-upgrade --force-yes
 
 echo "==> Install devel + build packages"
-apt-get -y install build-essential
+apt-get -y install build-essential byobu
+
+apt-get autoremove -y
+apt-get clean
 
 echo "==> Rebooting the vm"
 reboot
