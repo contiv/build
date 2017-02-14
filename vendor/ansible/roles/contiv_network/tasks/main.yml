@@ -1,17 +1,5 @@
 ---
 # This role contains tasks for configuring and starting netmaster and netplugin service
-- name: check dns container image
-  shell: docker inspect skynetservices/skydns
-  register: docker_inspect_result
-  ignore_errors: yes
-  tags:
-    - prebake-for-dev
-
-- name: pull dns container image
-  shell: docker pull skynetservices/skydns
-  when: "'No such image' in docker_inspect_result.stderr"
-  tags:
-    - prebake-for-dev
 
 # install ovs, needed for our netplugin deployments. In future, if needed, this
 # install can be conditional based on deployment environment.
@@ -29,11 +17,16 @@
     - "{{ gobgp_grpc_port }}"
     - "{{ bgp_port }}"
 
+- name: copy netmaster and netplugin
+  copy: src="{{ contiv_standalone_binaries }}/{{ contiv_network_tar_file }}" dest="{{ contiv_network_dest_file }}"
+  when: contiv_network_local_install == True 
+
 - name: download netmaster and netplugin
   get_url:
     validate_certs: "{{ validate_certs }}"
     url: "{{ contiv_network_src_file }}"
     dest: "{{ contiv_network_dest_file }}" 
+  when: contiv_network_local_install == False
 
 - name: ensure netplugin directory exists
   file: path=/usr/bin/contiv/netplugin state=directory
@@ -66,7 +59,7 @@
   file: src=/usr/bin/contiv/netplugin/contrib/completion/bash/netctl dest=/etc/bash_completion.d/netctl state=link
 
 - name: start netplugin
-  shell: systemctl daemon-reload && systemctl start netplugin
+  systemd: name=netplugin daemon_reload=yes state=started enabled=yes
 
 - name: setup netmaster host alias
   lineinfile:
@@ -95,7 +88,7 @@
   when: run_as == "master"
 
 - name: start netmaster
-  shell: systemctl daemon-reload && systemctl start netmaster
+  systemd: name=netmaster daemon_reload=yes state=started enabled=yes
   when: run_as == "master"
 
 # FIXME: need to move the following tasks to correct role
