@@ -94,6 +94,9 @@ for i in $UNNEEDED_LOCALES; do rm -rf $i; done
 ls -ahl /usr/share/locale
 echo "==> Finished removing unneeded locales"
 
+echo "==> Removing unneeded background images"
+rm -f /usr/share/backgrounds/*.png
+rm -f /usr/share/backgrounds/*.jpg
 
 echo '==> Zeroing out empty area to save space in the final image'
 # Zero out the free space to save space in the final image.  Contiguous
