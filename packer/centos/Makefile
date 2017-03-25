@@ -10,7 +10,7 @@ stop:
 	vagrant destroy -f
 
 build:
-	version=$$(cat VERSION) atlas_token="dummy" packer build --only build-virtualbox --force centos73.json
+	version=$$(cat VERSION) atlas_token="dummy" packer build -color=false --only build-virtualbox --force centos73.json
 
 release-build:
 	changelog=${GITHUB_RELEASE_URL} version=$$(cat VERSION) atlas_token=${ATLAS_TOKEN} packer build --only release-virtualbox --force centos73.json
