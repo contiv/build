@@ -83,6 +83,18 @@ echo "==> Rebuild RPM DB"
 rpmdb --rebuilddb
 rm -f /var/lib/rpm/__db*
 
+echo "==> Remove unneeded locales"
+localedef --list-archive | grep -a -v ^en | xargs localedef --delete-from-archive
+cp /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
+build-locale-archive
+ls -ahl /usr/lib/locale/locale-archive
+cd /usr/share/locale/
+UNNEEDED_LOCALES=$(ls /usr/share/locale/ | grep -v ^en)
+for i in $UNNEEDED_LOCALES; do rm -rf $i; done
+ls -ahl /usr/share/locale
+echo "==> Finished removing unneeded locales"
+
+
 echo '==> Zeroing out empty area to save space in the final image'
 # Zero out the free space to save space in the final image.  Contiguous
 # zeroed space compresses down to nothing.
