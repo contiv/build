@@ -83,15 +83,40 @@ echo "==> Rebuild RPM DB"
 rpmdb --rebuilddb
 rm -f /var/lib/rpm/__db*
 
+echo "==> Remove unneeded locales"
+localedef --list-archive | grep -a -v ^en | xargs localedef --delete-from-archive
+cp /usr/lib/locale/locale-archive /usr/lib/locale/locale-archive.tmpl
+build-locale-archive
+ls -ahl /usr/lib/locale/locale-archive
+cd /usr/share/locale/
+UNNEEDED_LOCALES=$(ls /usr/share/locale/ | grep -v ^en)
+for i in $UNNEEDED_LOCALES; do rm -rf $i; done
+ls -ahl /usr/share/locale
+echo "==> Finished removing unneeded locales"
+
+echo "==> Removing unneeded background images"
+rm -f /usr/share/backgrounds/*.png
+rm -f /usr/share/backgrounds/*.jpg
+
 echo '==> Zeroing out empty area to save space in the final image'
 # Zero out the free space to save space in the final image.  Contiguous
 # zeroed space compresses down to nothing.
-dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit code $? is suppressed"
+dd if=/dev/zero of=/EMPTY bs=1M oflag=direct || echo "dd exit code $? is suppressed"
 rm -f /EMPTY
 
 # Zero out boot as well
-dd if=/dev/zero of=/boot/EMPTY bs=1M || echo "dd exit code $? is suppressed"
+dd if=/dev/zero of=/boot/EMPTY bs=1M oflag=direct || echo "dd exit code $? is suppressed"
 rm -f /boot/EMPTY
+
+# Zero out the swap block device
+SWAP_BLOCK=$(cat /proc/swaps | tail -n1 | awk -F ' ' '{print $1}')
+if [ -n "$SWAP_BLOCK" ]; then
+	echo "==> Zeroing out swap block device "
+	swapoff $SWAP_BLOCK
+	dd if=/dev/zero of=$SWAP_BLOCK bs=1M oflag=direct
+	mkswap $SWAP_BLOCK
+	swapon $SWAP_BLOCK
+fi
 
 # Block until the empty file has been removed, otherwise, Packer
 # will try to kill the box while the disk is still full and that's bad
