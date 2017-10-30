@@ -1,0 +1,24 @@
+#!groovy
+pipeline {
+  agent { label 'public' }
+  options {
+    timeout(time: 30, unit: 'MINUTES')
+  }
+  stages {
+    stage('Build Release') {
+      steps {
+        sh '''
+          set -euo pipefail
+
+          # TODO(NB): Should github-release be installed on the slave beforehand like other dependencies?
+          export GOPATH="${WORKSPACE}"
+          export PATH="${PATH}:${GOPATH}/bin"
+          go get github.com/aktau/github-release
+
+          make -C packer/centos release-build
+          make -C packer/centos release-github
+        '''
+      }
+    }
+  }
+}
